@@ -82,6 +82,42 @@ const displayMovements = function (movements) {
 };
 
 displayMovements(account1.movements);
+
+const calcDisplayBalance = function (movements) {
+  const balance = movements.reduce((acc, move) => acc + move, 0);
+  labelBalance.textContent = `Rs ${balance} `
+}
+calcDisplayBalance(account1.movements);
+
+const calcDisplaySummary = function (movements) {
+
+  // IN 
+  const income = movements
+    .filter(move => move >= 0)
+    .reduce((move, curr) => move + curr, 0);
+  labelSumIn.textContent = `Rs ${income}`;
+
+  // Out 
+  const out = movements
+    .filter(move => move < 0)
+    .reduce((move, curr) => Math.abs(move) + Math.abs(curr), 0);
+  labelSumOut.textContent = `Rs ${out}`;
+
+  // Interest 
+  const interest = movements.filter(move => move > 0)
+    .map(deposit => deposit * 1.2 / 100)
+    //Only get interest if Rs>= 1
+    .filter((int, i, arr) => {
+      //console.log(arr);
+      return int >= 1;
+    })
+    .reduce((acc, curr) => acc + curr, 0);
+
+  labelSumInterest.textContent = `Rs ${interest}`;
+
+}
+calcDisplaySummary(account1.movements);
+
 const createUsernames = function (accs) {
 
   // We are using forEach as we're manioulating the origianl account object 
@@ -97,8 +133,7 @@ const createUsernames = function (accs) {
   });
 };
 createUsernames(accounts)
-console.log(accounts);
-
+//console.log(accounts);
 
 // const usertrim = user.trim().toLowerCase().split(' ').map(name => name[0]).join('');
 // console.log(usertrim);
@@ -107,6 +142,9 @@ console.log(accounts);
 //   username.push(name.splice(0, 1));
 //   console.log(username);
 // }
+
+
+
 
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
@@ -173,3 +211,51 @@ const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 //     )}`
 // );
 // console.log(movementsDescriptions);
+
+// const withdrawal = [];
+// for (const move of movements) {
+//   if (move < 0) {
+//     withdrawal.push(move);
+//   }
+// }
+// console.log(withdrawal);
+
+// Can also be written as -> 
+// const withdrawal = movements.filter(movement => movement < 0);
+// //console.log(withdrawal);
+
+
+// // Reduce method 
+// //reduce (revious value, current value, index, array) 
+// const balance = movements.reduce((acc, cur) => acc + cur, 0);   // 0 is the default value. 
+// //console.log(balance);
+
+// Challenge 2 
+
+// function calcAverageHumanAge(ages) {
+//   console.log("ages", ages);
+//   const humanAge = ages.map(age => (age <= 2 ? age * 2 : 16 + age * 4));
+//   console.log("human age", humanAge);
+//   const filteredAge = humanAge.filter(age => age >= 18);
+//   console.log("filtered age", filteredAge);
+//   const averageAge = filteredAge.reduce((acc, cur, index, arr) => (acc + cur), 0) / filteredAge.length;
+
+//   console.log("average age", averageAge);
+// }
+
+// calcAverageHumanAge([5, 2, 4, 1, 15, 8, 3]);
+
+
+//--------------- Challenge #3 
+
+
+// TEST DATA 1: [5, 2, 4, 1, 15, 8, 3]
+// TEST DATA 2: [16, 6, 10, 5, 6, 1, 4]
+
+const calcAverageHumanAge = (ages) =>
+  ages
+    .map(age => age <= 2 ? age * 2 : 16 + age * 4)
+    .filter(age => age >= 18)
+    .reduce((acc, curr, index, arr) => acc + curr / arr.length, 0)
+console.log(calcAverageHumanAge([5, 2, 4, 1, 15, 8, 3]));
+console.log(calcAverageHumanAge([16, 6, 10, 5, 6, 1, 4])); 
