@@ -36,7 +36,7 @@ const account1 = {
     '2020-07-12T10:51:36.790Z',
   ],
   currency: 'INR',
-  locale: 'pt-PT', // de-DE
+  locale: 'en-IN',
 };
 
 const account2 = {
@@ -270,7 +270,7 @@ const startLogOutTimer = function () {
 
     // When 0 seconds, stop the timer and log out. 
   }
-  let time = 10;
+  let time = 120;
 
   //Call the timer
   tick();
@@ -391,6 +391,10 @@ btnTransfer.addEventListener('click', function (e) {
     receiverAcc.movementsDates.push(new Date().toISOString());
 
     updateUI(currentAccount);
+
+    //Reset the timer 
+    clearInterval(timer);
+    timer = startLogOutTimer();
   }
 })
 
